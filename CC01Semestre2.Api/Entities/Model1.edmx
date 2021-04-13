@@ -1,0 +1,140 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="CC01Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Bien">
+          <Key>
+            <PropertyRef Name="IdBien" />
+          </Key>
+          <Property Name="IdBien" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NomBien" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Description" Type="varchar(max)" Nullable="false" />
+          <Property Name="DateCreation" Type="date" Nullable="false" />
+          <Property Name="IdProprietaire" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Proprietaire">
+          <Key>
+            <PropertyRef Name="IdProprietaire" />
+          </Key>
+          <Property Name="IdProprietaire" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NomProprietaire" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="DateCreation" Type="date" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Bien_Proprietaire">
+          <End Role="Proprietaire" Type="Self.Proprietaire" Multiplicity="1" />
+          <End Role="Bien" Type="Self.Bien" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Proprietaire">
+              <PropertyRef Name="IdProprietaire" />
+            </Principal>
+            <Dependent Role="Bien">
+              <PropertyRef Name="IdProprietaire" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="CC01ModelStoreContainer">
+          <EntitySet Name="Bien" EntityType="Self.Bien" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Proprietaire" EntityType="Self.Proprietaire" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Bien_Proprietaire" Association="Self.FK_Bien_Proprietaire">
+            <End Role="Proprietaire" EntitySet="Proprietaire" />
+            <End Role="Bien" EntitySet="Bien" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="CC01Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Bien">
+          <Key>
+            <PropertyRef Name="IdBien" />
+          </Key>
+          <Property Name="IdBien" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NomBien" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="DateCreation" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="IdProprietaire" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Proprietaire" Relationship="Self.FK_Bien_Proprietaire" FromRole="Bien" ToRole="Proprietaire" />
+        </EntityType>
+        <EntityType Name="Proprietaire">
+          <Key>
+            <PropertyRef Name="IdProprietaire" />
+          </Key>
+          <Property Name="IdProprietaire" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NomProprietaire" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="DateCreation" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="Biens" Relationship="Self.FK_Bien_Proprietaire" FromRole="Proprietaire" ToRole="Bien" />
+        </EntityType>
+        <Association Name="FK_Bien_Proprietaire">
+          <End Role="Proprietaire" Type="Self.Proprietaire" Multiplicity="1" />
+          <End Role="Bien" Type="Self.Bien" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Proprietaire">
+              <PropertyRef Name="IdProprietaire" />
+            </Principal>
+            <Dependent Role="Bien">
+              <PropertyRef Name="IdProprietaire" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="CC01Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Biens" EntityType="Self.Bien" />
+          <EntitySet Name="Proprietaires" EntityType="Self.Proprietaire" />
+          <AssociationSet Name="FK_Bien_Proprietaire" Association="Self.FK_Bien_Proprietaire">
+            <End Role="Proprietaire" EntitySet="Proprietaires" />
+            <End Role="Bien" EntitySet="Biens" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="CC01ModelStoreContainer" CdmEntityContainer="CC01Entities">
+          <EntitySetMapping Name="Biens">
+            <EntityTypeMapping TypeName="CC01Model.Bien">
+              <MappingFragment StoreEntitySet="Bien">
+                <ScalarProperty Name="IdBien" ColumnName="IdBien" />
+                <ScalarProperty Name="NomBien" ColumnName="NomBien" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="DateCreation" ColumnName="DateCreation" />
+                <ScalarProperty Name="IdProprietaire" ColumnName="IdProprietaire" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Proprietaires">
+            <EntityTypeMapping TypeName="CC01Model.Proprietaire">
+              <MappingFragment StoreEntitySet="Proprietaire">
+                <ScalarProperty Name="IdProprietaire" ColumnName="IdProprietaire" />
+                <ScalarProperty Name="NomProprietaire" ColumnName="NomProprietaire" />
+                <ScalarProperty Name="DateCreation" ColumnName="DateCreation" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Aucun" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
